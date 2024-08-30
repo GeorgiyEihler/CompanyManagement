@@ -43,6 +43,10 @@ internal sealed class CompanyConfigurations : IEntityTypeConfiguration<Company>
             .UsePropertyAccessMode(PropertyAccessMode.Field)
             .HasColumnName("is_deleted");
 
+        builder
+            .HasIndex("_isDeleted")
+            .HasFilter("is_deleted = false");
+
         builder.HasMany(c => c.Employees)
             .WithOne()
             .HasForeignKey(c => c.CompanyId);

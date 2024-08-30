@@ -29,7 +29,7 @@ public class RemoveCompanyTests : IntegrationTestBase
     }
 
     [Fact]
-    public async Task HandleAsync_WhenRemoveExistiongCompany_ShouldSoftDeleteCompany()
+    public async Task HandleAsync_WhenRemoveExistiongCompanyWithToJsonConfiguration_ShouldThrowInvalidOperationException()
     {
         var id = (await _dbContxet.Companys.AsNoTracking().FirstAsync()).Id.Id;
 
@@ -38,5 +38,19 @@ public class RemoveCompanyTests : IntegrationTestBase
         var action = async () => await _sut.HandleAsync(removeCompanyRequest);
 
         await action.Should().ThrowAsync<InvalidOperationException>().Where(e => e.Message.Contains(""));
+    }
+
+    [Fact]
+    public async Task HandleAsync_WhenRemoveExistiongCompanyWithToJsonConfiguration_ShouldRemoveSoftDeleteAggregate()
+    {
+        var id = (await _dbContxet.Companys.AsNoTracking().FirstAsync()).Id.Id;
+
+        var removeCompanyRequest = new RemoveCompayCommand(id);
+
+        await _sut.HandleAsync(removeCompanyRequest);
+
+        var company = await _dbContxet.Companys.FirstOrDefaultAsync(c => c.Id == id);
+
+        company.Should().BeNull();
     }
 }
