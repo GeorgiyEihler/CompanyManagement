@@ -47,10 +47,12 @@ public class RemoveCompanyTests : IntegrationTestBase
 
         var removeCompanyRequest = new RemoveCompayCommand(id);
 
-        await _sut.HandleAsync(removeCompanyRequest);
+        var removeResult = await _sut.HandleAsync(removeCompanyRequest);
 
         var company = await _dbContxet.Companys.FirstOrDefaultAsync(c => c.Id == id);
 
+        removeResult.IsError.Should().BeFalse();
+        removeResult.Value.Should().Be(id);
         company.Should().BeNull();
     }
 }
