@@ -1,8 +1,9 @@
 ﻿using CompanyManagement.Domain.Users;
+using ErrorOr;
 
 namespace CompanyManagement.Application.Abstractions;
 
 public interface IJwtGenerator
 {
-    string GenerateToken(User user);
+    Task<ErrorOr<string>> GenerateToken(User user);
 }

@@ -29,12 +29,14 @@ public sealed class CreateParticipantProfileHandler
             return userResult.Errors;
         }
 
-        var createParticipantProfileResult = userResult.Value.CreateOwnerProfile();
+        var createParticipantProfileResult = userResult.Value.CreatePrticipantProfile();
 
         if (createParticipantProfileResult.IsError)
         {
             return createParticipantProfileResult.Errors;
         }
+
+        _userRepository.AddUserRole(userResult.Value);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

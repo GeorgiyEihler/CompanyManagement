@@ -2,7 +2,11 @@
 using CompanyManagement.Application.Comanies.CreateCompany;
 using CompanyManagement.Application.Comanies.GetCompany;
 using CompanyManagement.Application.Comanies.RemoveCompany;
+using CompanyManagement.Application.Profiles.CreateAdminProfile;
+using CompanyManagement.Application.Profiles.CreateOwnerProfile;
+using CompanyManagement.Application.Profiles.CreateParticipantProfile;
 using CompanyManagement.Application.Users.ChangePassword;
+using CompanyManagement.Application.Users.GetPermission;
 using CompanyManagement.Application.Users.Login;
 using CompanyManagement.Application.Users.Register;
 using FluentValidation;
@@ -25,6 +29,10 @@ public static class DependencyInjection
         services.AddScoped<LoginHandler>();
         services.AddScoped<ChangePasswordHandler>();
         services.AddScoped<RegisterHander>();
+        services.AddScoped<CreateOwnerProfileHandler>();
+        services.AddScoped<CreateAdminProfileHandler>();
+        services.AddScoped<CreateParticipantProfileHandler>();
+        services.AddScoped<GetPermissionQueryHandler>();
 
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 

@@ -39,6 +39,8 @@ public sealed class CreateAdminProfileHandler
 
         var createAdminResult = userResult.Value.CreateAdminProfile();
 
+        _userRepository.AddUserRole(userResult.Value);
+
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return Error.Validation();

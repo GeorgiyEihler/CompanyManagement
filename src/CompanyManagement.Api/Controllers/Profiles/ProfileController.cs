@@ -3,6 +3,7 @@ using CompanyManagement.Application.Profiles.CreateAdminProfile;
 using CompanyManagement.Application.Profiles.CreateOwnerProfile;
 using CompanyManagement.Application.Profiles.CreateParticipantProfile;
 using ErrorOr;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyManagement.Api.Controllers.Profiles;
@@ -11,12 +12,13 @@ namespace CompanyManagement.Api.Controllers.Profiles;
 public class ProfileController: ApiController
 {
     [HttpPost("owner")]
+    [Authorize]
     public async Task<IActionResult> CreateOwnerProfile(
         [FromRoute] Guid userId,
         [FromServices] CreateOwnerProfileHandler handler,
         CancellationToken cancellationToken)
     {
-        var requestUserId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);
+        var requestUserId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type == "user").Value);
 
         if (requestUserId != userId)
         {
@@ -36,12 +38,13 @@ public class ProfileController: ApiController
     }
 
     [HttpPost("participant")]
+    [Authorize]
     public async Task<IActionResult> CreateParticipantProfile(
        [FromRoute] Guid userId,
        [FromServices] CreateParticipantProfileHandler handler,
        CancellationToken cancellationToken)
     {
-        var requestUserId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);
+        var requestUserId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type == "user").Value);
 
         if (requestUserId != userId)
         {
@@ -61,13 +64,14 @@ public class ProfileController: ApiController
     }
 
     [HttpPost("admin")]
+    [Authorize(Permissions.CreateAdministator)]
     public async Task<IActionResult> CreateAdminProfile(
        [FromBody] CreateAdminRequest request,
        [FromRoute] Guid userId,
        [FromServices] CreateAdminProfileHandler handler,
        CancellationToken cancellationToken)
     {
-        var requestUserId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type == "id").Value);
+        var requestUserId = Guid.Parse(HttpContext.User.Claims.First(claim => claim.Type == "user").Value);
 
         if (requestUserId == Guid.Empty)
         {

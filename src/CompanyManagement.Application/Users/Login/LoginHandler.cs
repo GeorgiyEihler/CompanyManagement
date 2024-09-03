@@ -41,8 +41,13 @@ public class LoginHandler(
             return Error.Forbidden(code: "User.Login", description: "The password is incorrect");
         }
 
-        var jwtToken = _jwtTokenGenerator.GenerateToken(user);
+        var jwtTokenResult = await _jwtTokenGenerator.GenerateToken(user);
 
-        return new LoginResponse(jwtToken);
+        if (jwtTokenResult.IsError)
+        {
+            return jwtTokenResult.Errors;
+        }
+
+        return new LoginResponse(jwtTokenResult.Value);
     }
 }

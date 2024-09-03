@@ -9,6 +9,8 @@ public interface IUserRepository
 {
     Task<ErrorOr<User>> GetUserAsync(Login login, CancellationToken cancellationToken);
 
+    void AddUserRole(User user);
+
     Task<ErrorOr<User>> GetUserByIdAsync(UserId userId, CancellationToken cancellationToken);
 
     Task<bool> IsUserWithSameEmailAlreadyExistsAsync(Email email, CancellationToken cancellationToken);

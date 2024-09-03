@@ -1,5 +1,4 @@
 ﻿using CompanyManagement.Domain.Common;
-using CompanyManagement.Domain.Owners;
 using CompanyManagement.Domain.Shared;
 using CompanyManagement.Domain.Shared.Ids;
 using CompanyManagement.Domain.Users.Events;
@@ -9,6 +8,8 @@ namespace CompanyManagement.Domain.Users;
 
 public sealed class User : AggregateRoot<UserId>
 {
+    private readonly List<Role> _roles = [];
+
     public FullName FullName { get; private set; }
 
     public Login Login { get; private set; }
@@ -20,6 +21,8 @@ public sealed class User : AggregateRoot<UserId>
     public ParticipantId? ParticipantId { get; private set; }
 
     public AdministratorId? AdministratorId { get; private set; }
+
+    public IReadOnlyList<Role> Roles => _roles;
 
     public bool IsEmailConfirmed { get; private set; }
 
@@ -84,6 +87,8 @@ public sealed class User : AggregateRoot<UserId>
 
         var id = Guid.NewGuid();
 
+        _roles.Add(Role.Administrator);
+
         var administratorId = AdministratorId.Create(id);
 
         AdministratorId = administratorId;
@@ -104,6 +109,8 @@ public sealed class User : AggregateRoot<UserId>
 
         var pariticpatnId = ParticipantId.Create(id);
 
+        _roles.Add(Role.Participatn);
+
         ParticipantId = pariticpatnId;
 
         RaiseDomainEvent(new ParticipantCreatedEvent(id));
@@ -123,6 +130,8 @@ public sealed class User : AggregateRoot<UserId>
         var ownerId = OwnerId.Create(id);
 
         OwnerId = ownerId;
+
+        _roles.Add(Role.Owner);
 
         RaiseDomainEvent(new OwnerCreatedEvent(id));
 

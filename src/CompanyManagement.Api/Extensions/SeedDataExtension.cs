@@ -76,9 +76,9 @@ public static class SeedDataExtension
             var password = "qewQWE123!@#";
 
             var user = new User(
-                UserId.NewId, 
+                UserId.NewId,
                 DateTime.UtcNow,
-                Domain.Users.FullName.Create(faker.Name.FirstName(), faker.Name.LastName(), faker.Name.LastName()).Value, 
+                Domain.Users.FullName.Create(faker.Name.FirstName(), faker.Name.LastName(), faker.Name.LastName()).Value,
                 Login.Create(faker.Internet.UserName()).Value,
                 Email.Create(faker.Person.Email).Value,
                 hasher.HashPassword(password).Value);

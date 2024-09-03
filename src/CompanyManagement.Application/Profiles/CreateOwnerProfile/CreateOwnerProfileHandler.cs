@@ -34,6 +34,8 @@ public sealed class CreateOwnerProfileHandler
             return createOwnerProfileResult.Errors;
         }
 
+        _userRepository.AddUserRole(userResult.Value);
+
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return new CreateOwnerProfileResponse(createOwnerProfileResult.Value.Id);

@@ -13,7 +13,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace CompanyManagement.Infrastructure.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20240903070629_Init")]
+    [Migration("20240903192421_Init")]
     partial class Init
     {
         /// <inheritdoc />
@@ -198,6 +198,71 @@ namespace CompanyManagement.Infrastructure.Migrations
                     b.ToTable("participants", (string)null);
                 });
 
+            modelBuilder.Entity("CompanyManagement.Domain.Users.Permission", b =>
+                {
+                    b.Property<string>("Code")
+                        .HasColumnType("text")
+                        .HasColumnName("code");
+
+                    b.HasKey("Code")
+                        .HasName("pk_permissions");
+
+                    b.ToTable("permissions", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Code = "companies:get"
+                        },
+                        new
+                        {
+                            Code = "companies:update"
+                        },
+                        new
+                        {
+                            Code = "companies:delete"
+                        },
+                        new
+                        {
+                            Code = "users:get"
+                        },
+                        new
+                        {
+                            Code = "administrator:create"
+                        },
+                        new
+                        {
+                            Code = "users:update"
+                        });
+                });
+
+            modelBuilder.Entity("CompanyManagement.Domain.Users.Role", b =>
+                {
+                    b.Property<string>("Name")
+                        .HasMaxLength(50)
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("name");
+
+                    b.HasKey("Name")
+                        .HasName("pk_roles");
+
+                    b.ToTable("roles", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            Name = "Administrator"
+                        },
+                        new
+                        {
+                            Name = "Owner"
+                        },
+                        new
+                        {
+                            Name = "Participant"
+                        });
+                });
+
             modelBuilder.Entity("CompanyManagement.Domain.Users.User", b =>
                 {
                     b.Property<Guid>("Id")
@@ -277,6 +342,96 @@ namespace CompanyManagement.Infrastructure.Migrations
                         .HasName("pk_users");
 
                     b.ToTable("users", (string)null);
+                });
+
+            modelBuilder.Entity("PermissionRole", b =>
+                {
+                    b.Property<string>("PermissionCode")
+                        .HasColumnType("text")
+                        .HasColumnName("permission_code");
+
+                    b.Property<string>("RoleName")
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("role_name");
+
+                    b.HasKey("PermissionCode", "RoleName")
+                        .HasName("pk_role_permission");
+
+                    b.HasIndex("RoleName")
+                        .HasDatabaseName("ix_role_permission_role_name");
+
+                    b.ToTable("role_permission", (string)null);
+
+                    b.HasData(
+                        new
+                        {
+                            PermissionCode = "companies:get",
+                            RoleName = "Owner"
+                        },
+                        new
+                        {
+                            PermissionCode = "companies:update",
+                            RoleName = "Owner"
+                        },
+                        new
+                        {
+                            PermissionCode = "companies:delete",
+                            RoleName = "Owner"
+                        },
+                        new
+                        {
+                            PermissionCode = "companies:get",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "companies:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "companies:delete",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "users:get",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "administrator:create",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "users:update",
+                            RoleName = "Administrator"
+                        },
+                        new
+                        {
+                            PermissionCode = "companies:get",
+                            RoleName = "Participant"
+                        });
+                });
+
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.Property<string>("RolesName")
+                        .HasColumnType("character varying(50)")
+                        .HasColumnName("role_name");
+
+                    b.Property<Guid>("UserId")
+                        .HasColumnType("uuid")
+                        .HasColumnName("user_id");
+
+                    b.HasKey("RolesName", "UserId")
+                        .HasName("pk_user_roles");
+
+                    b.HasIndex("UserId")
+                        .HasDatabaseName("ix_user_roles_user_id");
+
+                    b.ToTable("user_roles", (string)null);
                 });
 
             modelBuilder.Entity("CompanyManagement.Domain.Companies.Company", b =>
@@ -398,6 +553,40 @@ namespace CompanyManagement.Infrastructure.Migrations
 
                     b.Navigation("Projects")
                         .IsRequired();
+                });
+
+            modelBuilder.Entity("PermissionRole", b =>
+                {
+                    b.HasOne("CompanyManagement.Domain.Users.Permission", null)
+                        .WithMany()
+                        .HasForeignKey("PermissionCode")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_role_permission_permissions_permission_code");
+
+                    b.HasOne("CompanyManagement.Domain.Users.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RoleName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_role_permission_roles_role_name");
+                });
+
+            modelBuilder.Entity("RoleUser", b =>
+                {
+                    b.HasOne("CompanyManagement.Domain.Users.Role", null)
+                        .WithMany()
+                        .HasForeignKey("RolesName")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_roles_roles_roles_name");
+
+                    b.HasOne("CompanyManagement.Domain.Users.User", null)
+                        .WithMany()
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired()
+                        .HasConstraintName("fk_user_roles_users_user_id");
                 });
 
             modelBuilder.Entity("CompanyManagement.Domain.Companies.Company", b =>
