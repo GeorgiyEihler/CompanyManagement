@@ -9,7 +9,7 @@ public class JwtOptionsSetup(IConfiguration configuration) : IConfigureOptions<J
 
     public void Configure(JwtOptions options)
     {
-        _configuration.GetSection(AuthenticationConstants.JWT_SETTINGS_SECTION_NAME)
+        _configuration.GetSection(InfrastructureConstants.Constatns.Authentication.JwtSectionName)
             .Bind(options);
     }
 }

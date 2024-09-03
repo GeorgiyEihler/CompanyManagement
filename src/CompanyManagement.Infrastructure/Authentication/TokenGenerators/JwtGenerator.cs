@@ -1,8 +1,6 @@
 ﻿using CompanyManagement.Application.Abstractions;
-using CompanyManagement.Application.Abstractions.Authentication;
 using CompanyManagement.Domain.Common;
 using CompanyManagement.Domain.Users;
-using ErrorOr;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.JsonWebTokens;
 using Microsoft.IdentityModel.Tokens;
@@ -16,19 +14,15 @@ internal sealed class JwtGenerator : IJwtGenerator
     private readonly JwtOptions _jwtOptions;
 
     private readonly IDateTimeProvider _dateTimeProvider;
-    private readonly IPermissionService _permissionService;
-
     public JwtGenerator(
         IOptions<JwtOptions> jwtSettings,
-        IDateTimeProvider dateTimeProvider,
-        IPermissionService permissionService)
+        IDateTimeProvider dateTimeProvider)
     {
         _jwtOptions = jwtSettings.Value;
         _dateTimeProvider = dateTimeProvider;
-        _permissionService = permissionService;
     }
 
-    public async Task<ErrorOr<string>> GenerateToken(User user)
+    public string GenerateToken(User user)
     {
         var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtOptions.Secrect));
         var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);

@@ -46,7 +46,7 @@ public static class DependencyInjection
         services.ConfigureOptions<JwtOptionsSetup>();
         services.ConfigureOptions<JwtBarerConfigurationOptions>();
 
-        services.AddScoped<IJwtGenerator, JwtGenerator>();
+        services.AddSingleton<IJwtGenerator, JwtGenerator>();
         services.AddSingleton<IPasswordHasher, PasswordHanser>();
 
         services.AddDbContext<ApplicationDbContext>(o => o.UseNpgsql(connectionString)
