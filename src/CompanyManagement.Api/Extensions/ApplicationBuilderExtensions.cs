@@ -1,4 +1,4 @@
-﻿using CompanyManagement.Infrastructure;
+﻿using CompanyManagement.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 
 namespace CompanyManagement.Api.Extensions;

@@ -2,8 +2,10 @@
 using CompanyManagement.Domain.Common;
 using CompanyManagement.Domain.Companies;
 using CompanyManagement.Domain.Companies.Employees;
+using CompanyManagement.Domain.Shared;
 using CompanyManagement.Domain.Shared.Ids;
-using CompanyManagement.Infrastructure;
+using CompanyManagement.Domain.Users;
+using CompanyManagement.Infrastructure.Persistence;
 
 namespace CompanyManagement.Api.Extensions;
 
@@ -43,7 +45,7 @@ public static class SeedDataExtension
                 var email = Email.Create(
                     faker.Person.Email).Value;
 
-                var fullName = FullName.Create(
+                var fullName = Domain.Companies.Employees.FullName.Create(
                     faker.Person.FirstName, 
                     faker.Person.LastName, 
                     faker.Person.LastName);
@@ -64,6 +66,27 @@ public static class SeedDataExtension
         }
 
         await dbContext.Companys.AddRangeAsync(companyList);
+
+        var hasher = scope.ServiceProvider.GetRequiredService<IPasswordHasher>();
+
+        var userList = new List<User>();
+
+        for (var i = 0; i < 10; i++)
+        {
+            var password = "qewQWE123!@#";
+
+            var user = new User(
+                UserId.NewId, 
+                DateTime.UtcNow,
+                Domain.Users.FullName.Create(faker.Name.FirstName(), faker.Name.LastName(), faker.Name.LastName()).Value, 
+                Login.Create(faker.Internet.UserName()).Value,
+                Email.Create(faker.Person.Email).Value,
+                hasher.HashPassword(password).Value);
+
+            userList.Add(user);
+        }
+
+        await dbContext.Users.AddRangeAsync(userList);
 
         await dbContext.SaveChangesAsync();
     }

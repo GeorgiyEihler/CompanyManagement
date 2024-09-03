@@ -1,4 +1,5 @@
 ﻿using CompanyManagement.Application.Abstractions;
+using CompanyManagement.Application.Abstractions.Repositories;
 using CompanyManagement.Domain.Common;
 using CompanyManagement.Domain.Companies;
 using CompanyManagement.Domain.Shared.Ids;
@@ -6,12 +7,22 @@ using ErrorOr;
 
 namespace CompanyManagement.Application.Comanies.CreateCompany;
 
-public sealed class CreateCompanyHandler(
-    IComapnyRepository comapnyRepository,
-    IDateTimeProvider dateTimeProvider)
+public sealed class CreateCompanyHandler
 {
-    private readonly IComapnyRepository _companyRepository = comapnyRepository;
-    private readonly IDateTimeProvider _dateTimeProvider = dateTimeProvider;
+    public CreateCompanyHandler(
+        IComapnyRepository comapnyRepository,
+        IDateTimeProvider dateTimeProvider,
+        IUnitOfWork unitOfWork)
+    {
+        _companyRepository = comapnyRepository;
+        _dateTimeProvider = dateTimeProvider;
+        _unitOfWork = unitOfWork;
+    }
+
+
+    private readonly IComapnyRepository _companyRepository;
+    private readonly IDateTimeProvider _dateTimeProvider;
+    private readonly IUnitOfWork _unitOfWork;
 
     public async Task<ErrorOr<Guid>> HandleAsync(CreateCompanyCommand command, CancellationToken cancellationToken = default)
     {
@@ -34,6 +45,8 @@ public sealed class CreateCompanyHandler(
             ImagesCollection.Create(image));
 
         await _companyRepository.AddCompanyAsync(company, cancellationToken);
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return company.Id.Id;
     }

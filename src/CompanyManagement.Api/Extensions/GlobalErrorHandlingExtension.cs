@@ -1,9 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Diagnostics;
+﻿using Microsoft.AspNetCore.Diagnostics;
 
 namespace CompanyManagement.Api.Extensions;
 
-public static class GlobalErrorHandlingExtension
+public static class GlobalErrorHandlingMapExtension
 {
     public static WebApplication UseGlobalErrorHandling(this WebApplication app)
     {

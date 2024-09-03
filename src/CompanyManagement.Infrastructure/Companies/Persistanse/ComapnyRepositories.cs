@@ -1,6 +1,7 @@
-﻿using CompanyManagement.Application.Abstractions;
+﻿using CompanyManagement.Application.Abstractions.Repositories;
 using CompanyManagement.Domain.Companies;
 using CompanyManagement.Domain.Shared.Ids;
+using CompanyManagement.Infrastructure.Persistence;
 using ErrorOr;
 using Microsoft.EntityFrameworkCore;
 
@@ -22,8 +23,6 @@ internal sealed class ComapnyRepositories(ApplicationDbContext context) : IComap
     public async Task AddCompanyAsync(Company company, CancellationToken cancellationToken)
     {
         await _context.Companys.AddAsync(company);
-
-        await _context.SaveChangesAsync();
     }
 
     public async Task<ErrorOr<Company>> GetByIdAsync(CompanyId companyId, CancellationToken cancellationToken = default)
@@ -36,14 +35,5 @@ internal sealed class ComapnyRepositories(ApplicationDbContext context) : IComap
         }
 
         return company;
-    }
-
-    public async Task<bool> RemoveAsync(Company comany, CancellationToken cancellationToken = default)
-    {
-        _context.Companys.Remove(comany);
-
-        await _context.SaveChangesAsync(cancellationToken);
-
-        return true;    
     }
 }

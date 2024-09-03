@@ -47,6 +47,9 @@ internal sealed class CompanyConfigurations : IEntityTypeConfiguration<Company>
             .HasIndex("_isDeleted")
             .HasFilter("is_deleted = false");
 
+        builder
+            .HasQueryFilter(b => EF.Property<bool>(b, "_isDeleted") == false);
+
         builder.HasMany(c => c.Employees)
             .WithOne()
             .HasForeignKey(c => c.CompanyId);

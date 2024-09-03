@@ -1,4 +1,5 @@
 ﻿using CompanyManagement.Domain.Common;
+using CompanyManagement.Domain.Shared;
 using CompanyManagement.Domain.Shared.Ids;
 
 namespace CompanyManagement.Domain.Companies.Employees;

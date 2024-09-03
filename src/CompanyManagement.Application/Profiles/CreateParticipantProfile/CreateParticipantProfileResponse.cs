@@ -1,0 +1,3 @@
+﻿namespace CompanyManagement.Application.Profiles.CreateParticipantProfile;
+
+public record CreateParticipantProfileResponse(Guid participantId);

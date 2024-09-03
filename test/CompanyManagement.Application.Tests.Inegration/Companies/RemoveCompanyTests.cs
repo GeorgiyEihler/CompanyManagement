@@ -11,7 +11,7 @@ public class RemoveCompanyTests : IntegrationTestBase
     private readonly RemoveCompanyHandler _sut;
     public RemoveCompanyTests(IntegrationTestWebFactory factory) : base(factory)
     {
-        _sut = new RemoveCompanyHandler(_comapnyRepository);
+        _sut = new RemoveCompanyHandler(_comapnyRepository, _unitOfWork);
     }
 
     [Fact]
@@ -29,7 +29,7 @@ public class RemoveCompanyTests : IntegrationTestBase
     }
 
     [Fact]
-    public async Task HandleAsync_WhenRemoveExistiongCompanyWithToJsonConfiguration_ShouldThrowInvalidOperationException()
+    public async Task HandleAsync_WhenRemoveExistiongCompanyWithToJsonConfiguration_ShouldNotThrowInvalidOperationException()
     {
         var id = (await _dbContxet.Companys.AsNoTracking().FirstAsync()).Id.Id;
 
@@ -37,7 +37,7 @@ public class RemoveCompanyTests : IntegrationTestBase
 
         var action = async () => await _sut.HandleAsync(removeCompanyRequest);
 
-        await action.Should().ThrowAsync<InvalidOperationException>().Where(e => e.Message.Contains(""));
+        await action.Should().NotThrowAsync<InvalidOperationException>();
     }
 
     [Fact]
@@ -52,7 +52,7 @@ public class RemoveCompanyTests : IntegrationTestBase
         var company = await _dbContxet.Companys.FirstOrDefaultAsync(c => c.Id == id);
 
         removeResult.IsError.Should().BeFalse();
-        removeResult.Value.Should().Be(id);
+        removeResult.Value.CompanyId.Should().Be(id);
         company.Should().BeNull();
     }
 }

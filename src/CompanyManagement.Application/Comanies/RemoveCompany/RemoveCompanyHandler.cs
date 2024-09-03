@@ -1,4 +1,5 @@
 ﻿using CompanyManagement.Application.Abstractions;
+using CompanyManagement.Application.Abstractions.Repositories;
 using CompanyManagement.Domain.Shared.Ids;
 using ErrorOr;
 
@@ -7,10 +8,14 @@ namespace CompanyManagement.Application.Comanies.RemoveCompany;
 public class RemoveCompanyHandler
 {
     private readonly IComapnyRepository _comapnyRepository;
+    private readonly IUnitOfWork _unitOfWork;
 
-    public RemoveCompanyHandler(IComapnyRepository comapnyRepository)
+    public RemoveCompanyHandler(
+        IComapnyRepository comapnyRepository, 
+        IUnitOfWork unitOfWork)
     {
         _comapnyRepository = comapnyRepository;
+        _unitOfWork = unitOfWork;
     }
 
     public async Task<ErrorOr<RemoveCompanyResponse>> HandleAsync(RemoveCompayCommand request, CancellationToken cancellationToken = default)
@@ -24,7 +29,9 @@ public class RemoveCompanyHandler
             return Error.NotFound();
         }
 
-        await _comapnyRepository.RemoveAsync(companyResult.Value, cancellationToken);
+        companyResult.Value.Delete();
+
+        await _unitOfWork.SaveChangesAsync(cancellationToken);
 
         return new RemoveCompanyResponse(request.CompanyId);
     }

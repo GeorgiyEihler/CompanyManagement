@@ -1,10 +1,13 @@
 ﻿using CompanyManagement.Application.Abstractions;
+using CompanyManagement.Application.Abstractions.Repositories;
 using CompanyManagement.Domain.Common;
-using CompanyManagement.Infrastructure.Cloack;
+using CompanyManagement.Infrastructure.Authentication;
+using CompanyManagement.Infrastructure.Authentication.TokenGenerators;
+using CompanyManagement.Infrastructure.Clock;
 using CompanyManagement.Infrastructure.Companies.Persistanse;
-using CompanyManagement.Infrastructure.Interceptors;
+using CompanyManagement.Infrastructure.Persistence;
+using CompanyManagement.Infrastructure.Users.Persistanse;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Diagnostics;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -20,11 +23,19 @@ public static class DependencyInjection
 
         services.AddTransient<IDateTimeProvider, SystemDateTimeProvider>();
 
+        services.ConfigureOptions<JwtOptionsSetup>();
+
+        services.AddSingleton<IJwtGenerator, JwtGenerator>();
+        services.AddSingleton<IPasswordHasher, PasswordHanser>();
+
         services.AddDbContext<ApplicationDbContext>(o => o.UseNpgsql(connectionString)
             .UseSnakeCaseNamingConvention()
             .UseLoggerFactory(LoggerFactory.Create(builder => { builder.AddConsole(); })));
 
+        services.AddScoped<IUnitOfWork>(sp => sp.GetRequiredService<ApplicationDbContext>());
+
         services.AddScoped<IComapnyRepository, ComapnyRepositories>();
+        services.AddScoped<IUserRepository, UserRepository>();
 
         return services;
     }
