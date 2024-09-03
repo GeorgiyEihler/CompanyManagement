@@ -1,10 +1,13 @@
 ﻿using CompanyManagement.Application.Abstractions;
 using CompanyManagement.Application.Abstractions.Repositories;
 using CompanyManagement.Domain.Common;
+using CompanyManagement.Infrastructure.Administrators.Persistence;
 using CompanyManagement.Infrastructure.Authentication;
 using CompanyManagement.Infrastructure.Authentication.TokenGenerators;
 using CompanyManagement.Infrastructure.Clock;
 using CompanyManagement.Infrastructure.Companies.Persistanse;
+using CompanyManagement.Infrastructure.Owners.Perisisntence;
+using CompanyManagement.Infrastructure.Participants.Persistence;
 using CompanyManagement.Infrastructure.Persistence;
 using CompanyManagement.Infrastructure.Users.Persistanse;
 using Microsoft.EntityFrameworkCore;
@@ -21,9 +24,12 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("Database") ??
             throw new ApplicationException(nameof(configuration));
 
+        services.AddAuthenticationInternal();
+
         services.AddTransient<IDateTimeProvider, SystemDateTimeProvider>();
 
         services.ConfigureOptions<JwtOptionsSetup>();
+        services.ConfigureOptions<JwtBarerConfigurationOptions>();
 
         services.AddSingleton<IJwtGenerator, JwtGenerator>();
         services.AddSingleton<IPasswordHasher, PasswordHanser>();
@@ -36,6 +42,9 @@ public static class DependencyInjection
 
         services.AddScoped<IComapnyRepository, ComapnyRepositories>();
         services.AddScoped<IUserRepository, UserRepository>();
+        services.AddScoped<IOwnerRepositpry, OwnerRepositpry>();
+        services.AddScoped<IAdministratorRepostory, AdministartorRepository>();
+        services.AddScoped<IParticipantRepository, ParticipantRepository>();
 
         return services;
     }

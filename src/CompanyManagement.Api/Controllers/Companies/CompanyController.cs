@@ -3,11 +3,13 @@ using CompanyManagement.Application.Comanies.CreateCompany;
 using CompanyManagement.Application.Comanies.GetCompany;
 using CompanyManagement.Application.Comanies.RemoveCompany;
 using FluentValidation;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace CompanyManagement.Api.Controllers.Companies;
 
 [Route("api/[controller]")]
+[Authorize]
 public class CompanyController : ApiController
 {
     public CompanyController()

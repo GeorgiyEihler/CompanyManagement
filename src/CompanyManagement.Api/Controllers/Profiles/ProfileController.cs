@@ -13,7 +13,6 @@ public class ProfileController: ApiController
     [HttpPost("owner")]
     public async Task<IActionResult> CreateOwnerProfile(
         [FromRoute] Guid userId,
-        [FromBody] CreateOwnerRequest request,
         [FromServices] CreateOwnerProfileHandler handler,
         CancellationToken cancellationToken)
     {
