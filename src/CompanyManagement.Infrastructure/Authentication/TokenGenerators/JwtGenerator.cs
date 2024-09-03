@@ -46,7 +46,7 @@ internal sealed class JwtGenerator : IJwtGenerator
     }
 
     private List<Claim> GenerateUserClaims(User user)
-    {
+    { 
         List<Claim> claims = [
             new(JwtRegisteredClaimNames.Name, user.FullName.FirstName),
             new(JwtRegisteredClaimNames.FamilyName, user.FullName.LastName),

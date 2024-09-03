@@ -1,4 +1,4 @@
-﻿using CompanyManagement.Application.Abstractions;
+﻿using CompanyManagement.Application.Abstractions.Repositories;
 using CompanyManagement.Domain.Shared.Ids;
 using ErrorOr;
 
@@ -6,7 +6,7 @@ namespace CompanyManagement.Application.Comanies.GetCompany;
 
 public sealed class GetCompanyHandler
 {
-    private IComapnyRepository _comapnyRepository;
+    private readonly IComapnyRepository _comapnyRepository;
 
     public GetCompanyHandler(IComapnyRepository comapnyRepository)
     {
