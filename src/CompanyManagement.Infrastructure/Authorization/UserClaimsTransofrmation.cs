@@ -39,7 +39,7 @@ internal sealed class UserClaimsTransofrmation : IClaimsTransformation
 
         var claimsIdentity = new ClaimsIdentity();
 
-        foreach (string permission in permissionsResult.Value.Permissions)
+        foreach (var permission in permissionsResult.Value.Permissions)
         {
             claimsIdentity.AddClaim(new Claim(SpecialClaims.Permission, permission));
         }
