@@ -1,9 +1,11 @@
 ﻿using CompanyManagement.Application.Abstractions;
+using CompanyManagement.Application.Abstractions.Database;
 using CompanyManagement.Application.Abstractions.Repositories;
 using CompanyManagement.Domain.Common;
 using CompanyManagement.Infrastructure.Administrators.Persistence;
 using CompanyManagement.Infrastructure.Authentication;
 using CompanyManagement.Infrastructure.Authentication.TokenGenerators;
+using CompanyManagement.Infrastructure.Authorization;
 using CompanyManagement.Infrastructure.Clock;
 using CompanyManagement.Infrastructure.Companies.Persistanse;
 using CompanyManagement.Infrastructure.Owners.Perisisntence;
@@ -13,7 +15,9 @@ using CompanyManagement.Infrastructure.Users.Persistanse;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Logging;
+using Npgsql;
 
 namespace CompanyManagement.Infrastructure;
 
@@ -24,7 +28,15 @@ public static class DependencyInjection
         var connectionString = configuration.GetConnectionString("Database") ??
             throw new ApplicationException(nameof(configuration));
 
+        var npgsqlDataSource = new NpgsqlDataSourceBuilder(connectionString).Build();
+
+        services.AddSingleton(npgsqlDataSource);
+
+        services.TryAddScoped<IDbConnectionFactory, DbConnectinoFatroy>();
+
         services.AddAuthenticationInternal();
+
+        services.AddAuthorizationInternal();
 
         services.AddTransient<IDateTimeProvider, SystemDateTimeProvider>();
 

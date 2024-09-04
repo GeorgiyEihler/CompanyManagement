@@ -76,24 +76,24 @@ public static class ClaimExtension
 
         if (roleName == nameof(Administrator))
         {
-            claims.Add(new Claim("permissions", "companies:create"));
-            claims.Add(new Claim("permissions", "companies:remove"));
-            claims.Add(new Claim("permissions", "companies:update"));
-            claims.Add(new Claim("permissions", "companies:read"));
-            claims.Add(new Claim("permissions", "administrators:create"));
-            claims.Add(new Claim("permissions", "owners:create"));
+            claims.Add(new Claim(SpecialClaims.Permission, "companies:create"));
+            claims.Add(new Claim(SpecialClaims.Permission, "companies:remove"));
+            claims.Add(new Claim(SpecialClaims.Permission, "companies:read"));
+            claims.Add(new Claim(SpecialClaims.Permission, "companies:read"));
+            claims.Add(new Claim(SpecialClaims.Permission, "administrators:create"));
+            claims.Add(new Claim(SpecialClaims.Permission, "owners:create"));
         }
 
         if (roleName == nameof(Owner))
         {
-            claims.Add(new Claim("permissions", "companies:create"));
-            claims.Add(new Claim("permissions", "companies:remove"));
-            claims.Add(new Claim("permissions", "companies:update"));
+            claims.Add(new Claim(SpecialClaims.Permission, "companies:create"));
+            claims.Add(new Claim(SpecialClaims.Permission, "companies:remove"));
+            claims.Add(new Claim(SpecialClaims.Permission, "companies:read"));
         }
 
         if (roleName == nameof(Participant))
         {
-            claims.Add(new Claim("permissions", "companies:read"));
+            claims.Add(new Claim(SpecialClaims.Permission, "companies:read"));
         }
 
         return claims;

@@ -2,6 +2,9 @@
 using CompanyManagement.Application.Comanies.CreateCompany;
 using CompanyManagement.Application.Comanies.GetCompany;
 using CompanyManagement.Application.Comanies.RemoveCompany;
+using CompanyManagement.Application.Profiles.CreateAdminProfile;
+using CompanyManagement.Application.Profiles.CreateOwnerProfile;
+using CompanyManagement.Application.Profiles.CreateParticipantProfile;
 using CompanyManagement.Application.Users.ChangePassword;
 using CompanyManagement.Application.Users.Login;
 using CompanyManagement.Application.Users.Register;
@@ -22,9 +25,14 @@ public static class DependencyInjection
         services.AddScoped<GetCompanyHandler>();
         services.AddScoped<RemoveCompanyHandler>();
         services.AddScoped<CreateCompanyHandler>();
+
         services.AddScoped<LoginHandler>();
         services.AddScoped<ChangePasswordHandler>();
         services.AddScoped<RegisterHander>();
+
+        services.AddScoped<CreateParticipantProfileHandler>();
+        services.AddScoped<CreateAdminProfileHandler>();
+        services.AddScoped<CreateOwnerProfileHandler>();
 
         services.AddValidatorsFromAssembly(typeof(DependencyInjection).Assembly);
 

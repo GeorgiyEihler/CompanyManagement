@@ -17,6 +17,7 @@ public class CompanyController : ApiController
     }
 
     [HttpGet("{id:guid}")]
+    [Authorize(Permission.Get)]
     public async Task<IActionResult> GetById(
         Guid id,
         [FromServices] GetCompanyHandler handler,
@@ -35,6 +36,7 @@ public class CompanyController : ApiController
     }
 
     [HttpDelete("{id:guid}")]
+    [Authorize(Permission.Delete)]
     public async Task<IActionResult> Remove(
         Guid id,
         [FromServices] RemoveCompanyHandler hander,
@@ -53,6 +55,7 @@ public class CompanyController : ApiController
     }
 
     [HttpPost]
+    [Authorize(Permission.Create)]
     public async Task<IActionResult> Create(
         [FromBody] CreateCompanyRequest request,
         [FromServices] CreateCompanyHandler handler,
