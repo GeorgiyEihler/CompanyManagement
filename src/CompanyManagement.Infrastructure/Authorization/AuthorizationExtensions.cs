@@ -9,7 +9,7 @@ internal static class AuthorizationExtensions
     {
         services.AddTransient<IAuthorizationHandler, PermissionAuthorizationHandler>();
 
-        services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
+        // services.AddTransient<IAuthorizationPolicyProvider, PermissionAuthorizationPolicyProvider>();
 
         return services;
     }
