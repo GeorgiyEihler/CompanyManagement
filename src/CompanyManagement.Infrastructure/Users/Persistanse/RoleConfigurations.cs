@@ -12,8 +12,6 @@ internal sealed class RoleConfigurations : IEntityTypeConfiguration<Role>
 
         builder.HasKey(r => r.Name);
 
-        builder.HasKey(r => r.Name);
-
         builder.Property(r => r.Name).HasMaxLength(50);
 
         builder

@@ -22,7 +22,7 @@ public sealed class User : AggregateRoot<UserId>
 
     public AdministratorId? AdministratorId { get; private set; }
 
-    public IReadOnlyList<Role> Roles => _roles;
+    public IReadOnlyList<Role> Roles => _roles.ToList();
 
     public bool IsEmailConfirmed { get; private set; }
 
