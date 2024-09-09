@@ -9,4 +9,5 @@ public interface IComapnyRepository
     Task<bool> IsCompanyNumberExistsAsync(Number number, CancellationToken cancellationToken = default);
     Task AddCompanyAsync(Company company, CancellationToken cancellationToken = default);
     Task<ErrorOr<Company>> GetByIdAsync(CompanyId companyId, CancellationToken cancellationToken = default);
+    bool Remove(Company comany);
 }

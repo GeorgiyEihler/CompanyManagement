@@ -29,7 +29,7 @@ public class RemoveCompanyHandler
             return Error.NotFound();
         }
 
-        companyResult.Value.Delete();
+        _comapnyRepository.Remove(companyResult.Value);
 
         await _unitOfWork.SaveChangesAsync(cancellationToken);
 

@@ -36,4 +36,11 @@ internal sealed class ComapnyRepositories(ApplicationDbContext context) : IComap
 
         return company;
     }
+
+    public bool Remove(Company comany)
+    {
+        _context.Companys.Remove(comany);
+
+        return true;
+    }
 }
